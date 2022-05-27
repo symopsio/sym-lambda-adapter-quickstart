@@ -74,8 +74,8 @@ locals {
   flow_suffix  = var.sym_environment.name == "prod" ? "" : "_${var.sym_environment.name}"
   label_suffix = var.sym_environment.name == "prod" ? "" : " [${var.sym_environment.name}]"
 
-  flow_name  = "aws${local.flow_suffix}"
-  flow_label = "AWS${local.label_suffix}"
+  flow_name  = format("%s%s", var.flow_name, local.flow_suffix)
+  flow_label = format("%s%s", var.flow_label, local.label_suffix)
 
   targets = { for target in var.targets :
     format("%s-%s", local.flow_name, target["id"]) => target

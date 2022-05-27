@@ -1,3 +1,15 @@
+variable "flow_name" {
+  type        = string
+  description = "Name for the flow, used to create identifiers and for shortcuts"
+  default     = "api"
+}
+
+variable "flow_label" {
+  type        = string
+  description = "Display name for the flow"
+  default     = "API"
+}
+
 variable "flow_vars" {
   description = "Configuration values for the Flow implementation Python."
   type        = map(string)
