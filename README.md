@@ -1,27 +1,21 @@
-# Sym Lambda Adapter Quickstart
+# Sym Lambda SDK Example
+This example contains a module that provisions an AWS Lambda that can be invoked from a Sym hook.
 
-A starter workflow to integrate Sym with an API using an AWS Lambda adapter.
+# Setup Instructions
+To apply this terraform, there are several TODOs to fill in:
+- [module/lambda/function/handler.py](https://github.com/symopsio/sym-lambda-adapter-quickstart/blob/leslie/lambda-sdk-example/modules/lambda/function/handler.py#L15)
+  - To make a request, your Okta domain must be filled in on line 15 
+- The [API_KEY SSM Parameter](https://github.com/symopsio/sym-lambda-adapter-quickstart/blob/leslie/lambda-sdk-example/modules/lambda/main.tf#L73) value must be updated with your Okta API Key
+- [terraform.tfvars](https://github.com/symopsio/sym-lambda-adapter-quickstart/blob/leslie/lambda-sdk-example/terraform.tfvars)
+  - Your Slack Workspace ID must be filled in
+  - Your sym_org_slug must be filled in
+- [lambda-sdk-impl.py](https://github.com/symopsio/sym-lambda-adapter-quickstart/blob/leslie/lambda-sdk-example/lambda-sdk-impl.py)
+  - The Lambda ARN must match the output ARN of `module.lambda_handler`
 
-## Tutorial
-
-TBD
-
-## Data Flow
-
-When an End-User approves a Lambda-based escalation request, the Sym Platform does the following:
-
-1. Assumes your [Runtime Connector](https://docs.symops.com/docs/runtime-connector) IAM role. This role lives in your AWS account, and has access to tagged secrets within your AWS Secrets Manager instance.
-2. The Sym Runtime then assumes roles _again_ - this time your [Lambda Connector](https://docs.symops.com/docs/lambda-connector) IAM role. This role is trusted by the Runtime Connector and can be in the same AWS account or a different AWS account within your infrastructure.
-3. Using the Lambda Connector role, the runtime invokes a Lambda function to finish the escalation or de-escalation
-
-### Security Considerations
-
-Sym's Runtime Connector IAM Role has a trust relationship with Sym's production AWS account. This trust relationship allows the Sym platform to securely assume your Runtime Connector IAM role without a password. This is called a "role chaining" type of trust relationship.
-
-The RuntimeConnector module ensures that we use an [external id](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user_externalid.html) when assuming your IAM Role per AWS best practices.
-
-![Data Flow](docs/SymDataFlow.jpg)
-
-## About Sym
-
-This workflow is just one example of how [Sym Implementers](https://docs.symops.com/docs/deploy-sym-platform) use the [Sym SDK](https://docs.symops.com/docs) to create [Sym Flows](https://docs.symops.com/docs/flows) that use the [Sym Approval](https://docs.symops.com/docs/sym-approval) Template.
+# Important pieces of note
+- `module/lambda`: Is a stand-alone module that creates an AWS Lambda Function with access to SSM and Cloudwatch
+- `sym_environment.integrations`: Your `sym_environment` resource must contain a `aws_lambda_id` in order to invoke your lambda from a hook
+  - See: [main.tf: resource.sym_environment.main](https://github.com/symopsio/sym-lambda-adapter-quickstart/blob/leslie/lambda-sdk-example/main.tf#L74)
+- `lambda_connector`: This module is required for the Sym Runtime to be able to invoke your lambda
+  - See: [flow.tf: module.lambda_connector](https://github.com/symopsio/sym-lambda-adapter-quickstart/blob/leslie/lambda-sdk-example/flow.tf#L2)
+  - See: [flow.tf: resource.sym_integration.lambda_context](https://github.com/symopsio/sym-lambda-adapter-quickstart/blob/leslie/lambda-sdk-example/flow.tf#L13)

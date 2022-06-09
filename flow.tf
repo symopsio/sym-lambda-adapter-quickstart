@@ -18,31 +18,6 @@ resource "sym_integration" "lambda_context" {
   settings    = module.lambda_connector.settings
 }
 
-# A target that your API grants access to
-resource "sym_target" "admin_role" {
-  type = "aws_lambda_function"
-
-  name  = "admin-role"
-  label = "Admin Role"
-
-  settings = {
-    # The Lambda that is invoked when a request is made for this target
-    arn = module.lambda_handler.lambda_arn
-  }
-}
-# A target that your API grants access to
-resource "sym_target" "read_role" {
-  type = "aws_lambda_function"
-
-  name  = "read-role"
-  label = "Read Only Role"
-
-  settings = {
-    # The Lambda that is invoked when a request is made for this target
-    arn = module.lambda_handler.lambda_arn
-  }
-}
-
 resource "sym_flow" "lambda-sdk-example" {
   name  = "lambda-sdk-example"
   label = "AWS Lambda SDK Example"

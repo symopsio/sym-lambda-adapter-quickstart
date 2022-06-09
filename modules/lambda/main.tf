@@ -69,8 +69,7 @@ resource "aws_lambda_function" "sym_quickstart_lambda" {
 }
 
 
-# The AWS SSM Parameter containing the Bearer Token to use in the Authorization header
-# when calling the API to escalate/de-escalate.
+# The AWS SSM Parameter containing an API Token the Lambda can use.
 resource "aws_ssm_parameter" "api_key" {
   name  = var.api_key_path
   type  = "SecureString"

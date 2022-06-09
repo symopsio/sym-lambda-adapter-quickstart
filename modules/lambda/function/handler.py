@@ -14,6 +14,10 @@ def handle(event: dict, context) -> dict:
     # TODO: Fill in your okta_domain
     okta_domain = ""
 
+    # For testing purposes if you don't have an okta_domain at hand.
+    if not okta_domain:
+        return {"okta_id": "00ub0oNGTSWTBKOLGLNR"}
+
     # emails are first.last@domain.com
     email = event["email"]
 

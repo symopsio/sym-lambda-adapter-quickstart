@@ -15,15 +15,16 @@ def get_approvers(evt):
     return slack.channel(fvars["request_channel"], allow_self=True)
 
 
-# Hooks let you change the control flow of your workflow.
 @hook
 def on_request(evt):
     """
-    Get the okta ID and save the identity
+    Before executing a request, get the okta ID of the requester and save their identity.
     """
-    lambda_arn = "arn:aws:lambda:us-east-1:838419636750:function:get-okta-id"
-    response = aws_lambda.invoke(lambda_arn, {"email": evt.user.email})
-    okta_id = response["okta_id"]
-    persist_user_identity(email=evt.user.email, service="okta", service_id="okta-domain", user_id=okta_id)
 
-    print(f"Successfully persisted Okta Identity {okta_id} for {evt.user.email}")
+    # TODO: update this lambda_arn with the output from module.lambda_handler
+    lambda_arn = "arn:aws:lambda:us-east-1:{account_id}:function:get-okta-id"
+    response = aws_lambda.invoke(lambda_arn, {"email": evt.user.email})
+    if okta_id := response["okta_id"]:
+        persist_user_identity(email=evt.user.email, service="okta", service_id="okta-domain", user_id=okta_id)
+
+        print(f"Successfully persisted Okta Identity {okta_id} for {evt.user.email}")
