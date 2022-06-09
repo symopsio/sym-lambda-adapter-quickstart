@@ -22,12 +22,12 @@ def handle(event: dict, context) -> dict:
     email = event["email"]
 
     # okta user names are first.last
-    okta_username = email.strip("@")[0] #
+    okta_username = email.strip("@")[0]
 
     # You could import the Okta Python SDK (https://github.com/okta/okta-sdk-python#usage-guide)
     # but that requires asyncio, so we will just call the API directly for this POC
     # Get User by Login: https://developer.okta.com/docs/reference/api/users/#get-user-with-login
-    get_user_api = f"https://${okta_domain}/api/v1/users/{okta_username}"
+    get_user_api = f"https://{okta_domain}/api/v1/users/{okta_username}"
     headers = {"Authorization": f"SSWS {get_api_token()}"}
 
     response = requests.get(get_user_api, headers=headers)
