@@ -22,7 +22,7 @@ def handle(event: dict, context) -> dict:
     email = event["email"]
 
     # okta user names are first.last
-    okta_username = email.strip("@")[0]
+    okta_username = email.split("@")[0]
 
     # You could import the Okta Python SDK (https://github.com/okta/okta-sdk-python#usage-guide)
     # but that requires asyncio, so we will just call the API directly for this POC
@@ -35,6 +35,8 @@ def handle(event: dict, context) -> dict:
     if response.ok:
         return {"okta_id": response.json()["id"]}
     else:
+        logging.error(f"Failed to retrieve Okta user. Received: {response.status_code}")
+        logging.warning(response.json())
         return {"okta_id": None}
 
 
