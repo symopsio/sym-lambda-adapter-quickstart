@@ -25,6 +25,8 @@ def on_request(evt):
     lambda_arn = "arn:aws:lambda:us-east-1:{account_id}:function:get-okta-id"
     response = aws_lambda.invoke(lambda_arn, {"email": evt.user.email})
     if okta_id := response["okta_id"]:
+        # TODO: Update the service_id with your okta-domain
+        #   This is the "External ID" displayed when running `symflow services list`
         persist_user_identity(email=evt.user.email, service="okta", service_id="okta-domain", user_id=okta_id)
 
         print(f"Successfully persisted Okta Identity {okta_id} for {evt.user.email}")
