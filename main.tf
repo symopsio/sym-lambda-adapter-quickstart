@@ -10,8 +10,8 @@ provider "sym" {
 module "lambda_handler" {
   source = "./modules/lambda"
 
-  function_name = "sym-lambda-quickstart-function"
-  api_key_path = "/symops.com/sym-lambda-quickstart-function/API_KEY"
+  function_name = "get-okta-id"
+  api_key_path = "/symops.com/get-okta-id/API_KEY"
   tags          = var.tags
 }
 
@@ -67,6 +67,10 @@ resource "sym_environment" "main" {
   error_logger_id = sym_error_logger.slack.id
 
   integrations = {
+    # Enables sym.sdk.integrations.slack SDK methods
     slack_id = sym_integration.slack.id
+
+    # Enables sym.sdk.integration.aws_lambda SDK methods
+    aws_lambda_id = sym_integration.lambda_context.id
   }
 }

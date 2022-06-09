@@ -9,7 +9,6 @@ module "lambda_connector" {
 
   tags = var.tags
 }
-
 # The Integration your Strategy uses to invoke Lambdas.
 resource "sym_integration" "lambda_context" {
   type = "permission_context"
@@ -44,39 +43,26 @@ resource "sym_target" "read_role" {
   }
 }
 
-# The Strategy your Flow uses to manage Target AWS Lambda functions.
-resource "sym_strategy" "this" {
-  type = "aws_lambda"
+resource "sym_flow" "lambda-sdk-example" {
+  name  = "lambda-sdk-example"
+  label = "AWS Lambda SDK Example"
 
-  name           = "lambda-strategy"
-  integration_id = sym_integration.lambda_context.id
-  targets        = [sym_target.admin_role.id, sym_target.read_role.id]
-}
-
-# The Flow that grants users access by invoking your Lambda
-resource "sym_flow" "this" {
-  name  = "lambda-strategy"
-  label = "Sym AWS Lambda Quickstart"
-
-  template = "sym:template:approval:1.0.0"
-
-  implementation = "${path.module}/impl.py"
-
+  template       = "sym:template:approval:1.0.0"
+  implementation = "${path.module}/lambda-sdk-impl.py"
   environment_id = sym_environment.main.id
 
   vars = var.flow_variables
 
   params = {
-    strategy_id = sym_strategy.this.id
-
-    prompt_fields_json = jsonencode(
-      [
-        {
-          name     = "reason"
-          type     = "string"
-          required = true
-        }
-      ]
-    )
+    # prompt_fields_json defines custom form fields for the Slack modal that
+    # requesters fill out to make their requests.
+    prompt_fields_json = jsonencode([
+      {
+        name     = "reason"
+        label    = "Why do you need access?"
+        type     = "string"
+        required = true
+      }
+    ])
   }
 }
