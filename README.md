@@ -13,7 +13,6 @@ If this is the first time you have applied Terraform to create Sym resources, yo
   - Your Slack Workspace ID must be filled in
   - Your sym_org_slug must be filled in
 - [lambda-sdk-impl.py](https://github.com/symopsio/sym-lambda-adapter-quickstart/blob/leslie/lambda-sdk-example/lambda-sdk-impl.py)
-  - The Lambda ARN must match the output ARN of `module.lambda_handler`
   - The `service_id` parameter in `persist_user_identity` must be updated to your Okta domain (as displayed when running `symflow services list`)
 
 ## Adding to an Existing Setup

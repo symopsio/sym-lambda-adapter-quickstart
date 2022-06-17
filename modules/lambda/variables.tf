@@ -4,7 +4,6 @@ variable "function_name" {
   default     = "sym-lambda-quickstart-function"
 }
 
-
 variable "api_key_path" {
   description = "The name of the SSM Parameter containing your API Token"
   type        = string

@@ -4,6 +4,6 @@ output "lambda_arn" {
 }
 
 output "api_key_arn" {
-  description = "The arn of the SSM Parameter containin the API Key used by the lambda function"
-  value = aws_ssm_parameter.api_key.arn
+  description = "The arn of the SSM Parameter containing the API Key used by the lambda function"
+  value       = aws_ssm_parameter.api_key.arn
 }

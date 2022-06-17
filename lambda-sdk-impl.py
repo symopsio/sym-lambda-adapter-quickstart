@@ -21,9 +21,8 @@ def on_request(evt):
     Before executing a request, get the okta ID of the requester and save their identity.
     """
 
-    # TODO: update this lambda_arn with the output from module.lambda_handler
-    lambda_arn = "arn:aws:lambda:us-east-1:{account_id}:function:get-okta-id"
-    response = aws_lambda.invoke(lambda_arn, {"email": evt.user.email})
+    fvars = evt.flow.vars
+    response = aws_lambda.invoke(fvars["lambda_arn"], {"email": evt.user.email})
     if okta_id := response["okta_id"]:
         # TODO: Update the service_id with your okta-domain
         #   This is the "External ID" displayed when running `symflow services list`

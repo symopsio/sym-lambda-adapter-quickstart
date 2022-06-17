@@ -9,6 +9,7 @@ module "lambda_connector" {
 
   tags = var.tags
 }
+
 # The Integration your Strategy uses to invoke Lambdas.
 resource "sym_integration" "lambda_context" {
   type = "permission_context"
@@ -26,7 +27,12 @@ resource "sym_flow" "lambda-sdk-example" {
   implementation = "${path.module}/lambda-sdk-impl.py"
   environment_id = sym_environment.main.id
 
-  vars = var.flow_variables
+  vars = merge(
+    var.flow_variables,
+    {
+      lambda_arn = module.lambda_handler.lambda_arn
+    }
+  )
 
   params = {
     # prompt_fields_json defines custom form fields for the Slack modal that

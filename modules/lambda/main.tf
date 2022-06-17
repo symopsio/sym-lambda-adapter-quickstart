@@ -3,7 +3,7 @@ locals {
   lambda_root = "${path.module}/function"
 }
 
-# This has resource will pip install our Python dependencies into the function/ folder
+# This resource will pip install our Python dependencies into the function/ folder
 # when requirements.txt or handler.py is updated.
 resource "null_resource" "install_dependencies" {
   provisioner "local-exec" {
