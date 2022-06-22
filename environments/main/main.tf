@@ -17,27 +17,15 @@ module "sym_runtime" {
   tags               = var.tags
 }
 
-locals {
-  lambda_function_name = format("sym-adapter-%s", module.sym_runtime.environment.name)
-}
-
-# Adapter Lambda function
-module "adapter_lambda" {
-  source = "../../modules/adapter-lambda"
-
-  function_name = local.lambda_function_name
-  api_url       = var.api_url
-  tags          = var.tags
-}
-
-# A Flow that uses the API Lambda
-module "api_flow" {
-  source = "../../modules/api-flow"
+# A Flow that uses the [AWS Lambda](https://docs.symops.com/docs/aws-lambda)
+# strategy to call an AWS Lambda for custom escalation and de-escalation logic.
+module "adapter_flow" {
+  source = "../../modules/adapter-flow"
 
   flow_vars        = var.flow_vars
-  lambda_arn       = module.adapter_lambda.lambda_arn
+  lambda_vars      = var.lambda_vars
   runtime_settings = module.sym_runtime.runtime_settings
   sym_environment  = module.sym_runtime.environment
-  targets          = var.api_targets
+  targets          = var.flow_targets
   tags             = var.tags
 }

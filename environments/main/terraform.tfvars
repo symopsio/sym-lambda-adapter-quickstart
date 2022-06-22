@@ -9,19 +9,19 @@ flow_vars = {
   approvers = "foo@myco.com,bar@myco.com"
 }
 
-# API URL. Including this as an example of other configuration
-# points you might want to supply to your Lambda function as environment
-# variables
-api_url = "https://pastebin.com/api/api_post.php"
-
 # List of targets that users can request access to.
 # Each item has a label and id.
-api_targets = [
+flow_targets = [
   {
     label = "My Label",
     id    = "my-id"
   }
 ]
+
+# Optional variables to send to your Lambda function as env vars
+#lambda_vars = {
+#  my_var = "my_var_value"
+#}
 
 # Slack Workspace where Sym is installed
 slack_workspace_id = "CHANGEME"

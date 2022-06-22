@@ -54,7 +54,7 @@
   "fields": {
     "deescalate_type": "scheduled",
     "target": {
-      "name": "lambda_access-target1",
+      "name": "target1",
       "srn": "sym:access_target:lambda_access:latest:e6a92881-cb49-4580-bb17-56c581a596a2",
       "type": "aws_lambda_function",
       "label": "Lambda Access",

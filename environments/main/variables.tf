@@ -14,28 +14,29 @@ variable "error_channel" {
   }
 }
 
+variable "flow_targets" {
+  description = "List of IDs and Labels to pass to the lambda adapter"
+  type = list(object({
+    id = string, label = string
+  }))
+}
+
 variable "flow_vars" {
   description = "Configuration values for the Flow implementation Python"
   type        = map(string)
   default     = {}
 }
 
-variable "api_url" {
-  description = "The API URL your Lambda should hit"
-  type        = string
-}
-
-variable "api_targets" {
-  description = "List of API target IDs and Labels"
-  type = list(object({
-    id = string, label = string
-  }))
+variable "lambda_vars" {
+  description = "Key-value pairs that should be supplied to your lambda as environment variables"
+  type        = map(string)
+  default     = {}
 }
 
 variable "runtime_name" {
   description = "Name to assign to the Sym Runtime and its associated resources."
   type        = string
-  default     = "prod"
+  default     = "main"
 }
 
 variable "slack_workspace_id" {

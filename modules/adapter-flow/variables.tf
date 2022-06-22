@@ -1,13 +1,13 @@
 variable "flow_name" {
   type        = string
   description = "Name for the flow, used to create identifiers and for shortcuts"
-  default     = "api"
+  default     = "adapter"
 }
 
 variable "flow_label" {
   type        = string
   description = "Display name for the flow"
-  default     = "API"
+  default     = "Adapter"
 }
 
 variable "flow_vars" {
@@ -15,9 +15,9 @@ variable "flow_vars" {
   type        = map(string)
 }
 
-variable "lambda_arn" {
-  description = "The target AWS Lambda ARN that the flow will invoke"
-  type        = string
+variable "lambda_vars" {
+  description = "Key-value pairs that should be supplied to your lambda as environment variables"
+  type        = map(string)
 }
 
 variable "runtime_settings" {
@@ -37,7 +37,7 @@ variable "tags" {
 }
 
 variable "targets" {
-  description = "List of API IDs and Labels"
+  description = "List of IDs and Labels to pass to the lambda adapter"
   type = list(object({
     id = string, label = string
   }))

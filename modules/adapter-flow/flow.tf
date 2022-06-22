@@ -37,15 +37,15 @@ resource "sym_strategy" "this" {
 
 # The targets that your API grants access to
 resource "sym_target" "targets" {
-  for_each = local.targets
+  for_each = { for target in var.targets : target["id"] => target["label"] }
 
   type = "aws_lambda_function"
 
   name  = each.key
-  label = each.value["label"]
+  label = each.value
 
   settings = {
-    arn = var.lambda_arn
+    arn = aws_lambda_function.this.arn
   }
 }
 
@@ -55,7 +55,7 @@ module "lambda_connector" {
   version = ">= 1.12.0"
 
   environment       = local.flow_name
-  lambda_arns       = [var.lambda_arn]
+  lambda_arns       = [aws_lambda_function.this.arn]
   runtime_role_arns = [var.runtime_settings.role_arn]
 
   tags = var.tags
@@ -71,13 +71,9 @@ resource "sym_integration" "lambda_context" {
 }
 
 locals {
-  flow_suffix  = var.sym_environment.name == "prod" ? "" : "_${var.sym_environment.name}"
-  label_suffix = var.sym_environment.name == "prod" ? "" : " [${var.sym_environment.name}]"
+  flow_suffix  = var.sym_environment.name == "main" ? "" : "_${var.sym_environment.name}"
+  label_suffix = var.sym_environment.name == "main" ? "" : " [${var.sym_environment.name}]"
 
   flow_name  = format("%s%s", var.flow_name, local.flow_suffix)
   flow_label = format("%s%s", var.flow_label, local.label_suffix)
-
-  targets = { for target in var.targets :
-    format("%s-%s", local.flow_name, target["id"]) => target
-  }
 }

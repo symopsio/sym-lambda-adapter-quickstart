@@ -33,37 +33,31 @@ def resolve_user(event: dict) -> str:
 
 def update_user(username: str, event: dict):
     """
-    Hit the API with your credentials
+    Placeholder to update the user given a resolved username and input event.
     """
     # escalate or deescalate
     event_type = event["event"]["type"]
 
-    # find the target id based on the request target
-    target_id = resolve_target_id(event)
+    # find the target name based on the request target
+    target_name = event["fields"]["target"]["name"]
 
     # get config data from AWS SSM
     config = get_config()
 
-    # construct an API url using the event type (?)
-    api_url = f"{config.api_url}/{event_type}"
+    # Example API URL and placeholder API token
+    # You can use the get_ssm_parameter helper method in
+    # config.py to look up the parameter in Parameter Store.
+    # e.g. my_token = config.get_ssm_parameter("ssm_parameter_name")
+    api_url = "https://pastebin.com/api/api_post.php"
+    headers = {"API_TOKEN": "my_token"}
 
-    headers = {"API_TOKEN": config.api_token}
-    data = {"user": username, "target": target_id}
+    data = {"user": username, "target": target_name}
     resp = requests.post(api_url, data=data, headers=headers)
-    if resp.status_code != 200:
+    if resp.status_code not in range(200, 299):
         raise RuntimeError(
             f"API failed with status code: {resp.status_code} and message: {resp.text}"
         )
     return {"text": resp.text}
-
-
-def resolve_target_id(event: dict) -> str:
-    """
-    Get the target id from the target name. The name that comes in from sym is the flow name plus the
-    target id.
-    """
-    full_name = event["fields"]["target"]["name"]
-    return full_name.split("-")[-1]
 
 
 def load_event():

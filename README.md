@@ -36,20 +36,15 @@ Your engineers provision resources in both AWS and Sym. You can mix and match yo
 
 This repo contains both Terraform environments and modules. Environments represent actual provisioned resources in AWS and Sym. Modules are reusable components that you can parameterize and deploy to multiple environments.
 
-The [prod environment](environments/prod) is where we can iterate on the access workflow logic and test with initial users. Once we've got a setup that we like, we can set up a sandbox environment that we'll use for safe future iteration.
+The [main environment](environments/main) is where we can iterate on the access workflow logic and test with initial users. Once we've got a setup that we like, we can set up a sandbox environment that we'll use for safe future iteration.
+
 ### sym-runtime module
 
 The [`sym-runtime`](modules/sym-runtime) creates a shared Runtime that executes all your Flows.
 
-### adapter-lambda module
+### adapter-flow module
 
-The [`adapter-lambda`](modules/adapter-lambda) module creates an AWS Lambda function that your workflow invokes to hit your API.
-
-Refer to the [`README`](modules/adapter-lambda/README.md) for deployment and configuration details.
-
-### api-flow module
-
-The [`api-flow`](modules/api-flow) module defines the workflow that your engineers will use to invoke your adapter Lambda function.
+The [`adapter-flow`](modules/adapter-flow) module creates a Sym Flow that invokes an AWS Lambda function to hit your target API.
 
 ## About Sym
 

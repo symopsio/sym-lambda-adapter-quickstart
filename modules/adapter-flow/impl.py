@@ -16,16 +16,17 @@ def get_approvers(evt):
     return slack.channel(fvars["request_channel"], allow_self=True)
 
 
+# Uncomment me to enable authz based on an approvers group!
 # Hooks let you change the control flow of your workflow.
-# @hook Uncomment me to enable authz based on an approvers group!
-def on_approve(evt):
-    """
-    Only let members of the approver safelist approve requests
-    """
-    if not has_approve_access(evt):
-        return ApprovalTemplate.ignore(
-            message="You are not authorized to approve this request."
-        )
+# @hook
+# def on_approve(evt):
+#    """
+#    Only let members of the approver safelist approve requests
+#    """
+#    if not has_approve_access(evt):
+#        return ApprovalTemplate.ignore(
+#            message="You are not authorized to approve this request."
+#        )
 
 
 def has_approve_access(evt):
